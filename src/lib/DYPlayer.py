@@ -1,5 +1,3 @@
-#https://github.com/SnijderC/dyplayer/blob/main/src/DYPlayer.cpp
-
 import board
 import time
 import busio
@@ -78,7 +76,7 @@ class DYPlayer(object):
         command = [0xaa, 0x07, 0x02, 0x00, 0x00, 0x00]
         command[3] = (number >> 8) & 0xff
         command[4] = number & 0xff
-        command[5] = self._calculate_checksum(command)
+        command[5] = self._calculate_checksum(command,5)
         self._write_data(command)
 
     def checkPlayState(self):
@@ -90,19 +88,4 @@ class DYPlayer(object):
            return res[3]
         else:
            return None
-    
-    def setVolume(self, volume):
-        if volume > 30:
-            volume = 30
-        command = [0xaa, 0x13, 0x01, volume,0x00]
-        command[4] = self._calculate_checksum(command)
-        self._write_data(command)
-        
-    def volumeIncrease(self):
-        self._write_data([0xaa, 0x14, 0x00,0xbe])
-        
-    def volumeDecrease(self):
-        self._write_data([0xaa, 0x15, 0x00,0xbf])
-        
-        
         

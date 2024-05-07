@@ -25,15 +25,15 @@ artistPlayList=[
 ]
 
 moodsPlayList=[
-    ["Romantic",""],
-    ["Sad",""],
-    ["Happy",""],
-    ["Ghazal",""],
-    ["Shakti",""],
-    ["Spiritual",""],
-    ["Film Instrumental",""],
-    ["Sufi",""],
-    ["Hindustani Classical Inst",""],
+    ["Romantic","rmt.csv"],
+    ["Sad","sad.svc"],
+    ["Happy","hpy.csv"],
+    ["Ghazal","ghl.csv"],
+    ["Shakti","shk.csv"],
+    ["Spiritual","spr.csv"],
+    ["Film Instrumental","fmi.csv"],
+    ["Sufi","sf.csv"],
+    ["Hindustani Classical Inst","hci.csv"]
 ]
 
 geetmalaPlayList=[
