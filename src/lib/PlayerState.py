@@ -2,10 +2,18 @@ class PlayerState:
     
     def __init__(self):
         self.currentArtist = ""
-        self.rotary_last_position = None
-        self.rotary_button_state = None
-        self.volume = 70
-        self.rotary_button_mode = None
+        self.album_knob_last_position = None
+        self.album_knob_button_state = None
+        ##self.album_knob_mode = None
+
+
+        self.volume_knob_last_position = 0 #Or init with 0?
+        self.volume_knob_action = "PLAY"
+        self.volume_knob_button_state = None
+        self.volume = 20
+
+        self.paused = False
+
         self.current_track=1;
         self.current_artists_playlist_index=0
         self.current_moods_playlist_index=0

@@ -2,6 +2,7 @@ import busio
 import board
 import terminalio
 import displayio
+import i2cdisplaybus
 from adafruit_display_text import label, scrolling_label
 import adafruit_displayio_sh1106
 
@@ -9,15 +10,15 @@ class oledScreen:
     def __init__(self):
         displayio.release_displays()
         i2c = busio.I2C(board.GP17, board.GP16)
-        display_bus = displayio.I2CDisplay(i2c, device_address=0x3C)
+        display_bus = i2cdisplaybus.I2CDisplayBus(i2c, device_address=0x3c)
         self.display = adafruit_displayio_sh1106.SH1106(display_bus, width=132, height=64)
         self._setup()
         
     def _setup(self):
         self.display.sleep()
-        self.display.root_group.hidden = True
+        #self.display.root_group.hidden = True
         self.splash = displayio.Group()
-        self.display.show(self.splash)
+        self.display.root_group = self.splash
         
         self.heading1 = label.Label(
             terminalio.FONT, text="",scale = 2 ,color=0xFFFFFF, x=5, y=10

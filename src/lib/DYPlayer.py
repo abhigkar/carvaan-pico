@@ -1,3 +1,5 @@
+#https://github.com/SnijderC/dyplayer/blob/main/src/DYPlayer.cpp
+
 import board
 import time
 import busio
@@ -20,23 +22,23 @@ class DYPlayer(object):
 
     # --- constructor   --------------------------------------------------------
 
-    def __init__(self, uart=None, media=None, volume=50, eq=None, latency=0.100):
+    def __init__(self, uart=None, media=None, volume=20, eq=None, latency=0.100):
         if uart is None:
             self._uart = busio.UART(board.TX, board.RX, baudrate=9600)
         else:
             self._uart = uart
         self._latency = latency
 
-        #self.set_volume(volume)
+        self.setVolume(volume)
         #self.set_eq(eq if eq else DYPlayer.EQ_NORMAL)
 
     # --- transfer data to device   ---------------------------------------------
 
-    def _calculate_checksum(self,data):
+    def _calculate_checksum(self, data):
         sum = 0
         for i in range(len(data)):
             sum += data[i]
-        return sum
+        return sum & 0xff
 
     def _validate_crc(self, data, len):
         crc = data[-1]
@@ -76,7 +78,7 @@ class DYPlayer(object):
         command = [0xaa, 0x07, 0x02, 0x00, 0x00, 0x00]
         command[3] = (number >> 8) & 0xff
         command[4] = number & 0xff
-        command[5] = self._calculate_checksum(command,5)
+        command[5] = self._calculate_checksum(command)
         self._write_data(command)
 
     def checkPlayState(self):
@@ -88,4 +90,34 @@ class DYPlayer(object):
            return res[3]
         else:
            return None
+    
+    def setVolume(self, volume):
+        if volume > 30:
+            volume = 30
+        command = [0xaa, 0x13, 0x01, volume,0x00]
+        command[4] = self._calculate_checksum(command)
+        self._write_data(command)
         
+    def volumeIncrease(self):
+        self._write_data([0xaa, 0x14, 0x00,0xbe])
+        
+    def volumeDecrease(self):
+        self._write_data([0xaa, 0x15, 0x00,0xbf])
+        
+    def setVolume(self, volume):
+        command = [0xaa, 0x13, 0x01, 0x00, 0x00]
+        command[3] = volume
+        command[4] = self._calculate_checksum(command)
+        self._write_data(command)
+        
+    
+    #Normal:0, Pop:1, Rock:2, Jazz:3, Classic:4
+    def setEq(self, eqlzr):
+        command = [0xaa, 0x1a, 0x01, 0x00, 0x00]
+        command[3] = eqlzr
+        command[4] = self._calculate_checksum(command,4)
+        self._write_data(command)
+        
+        
+        
+
